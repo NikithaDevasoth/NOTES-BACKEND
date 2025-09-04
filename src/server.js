@@ -13,37 +13,33 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 
-// middleware
-if (process.env.NODE_ENV !== "production") {
-  app.use(
-    cors({
-      origin: "notes-frontend-mm14-5xldpa1ki-nikithas-projects-7e36f2ac.vercel.app",
-    })
-  );
-}
-app.use(express.json()); // this middleware will parse JSON bodies: req.body
+// ------------------ MIDDLEWARE ------------------
+
+// Parse JSON bodies
+app.use(express.json());
+
+// Rate limiting
 app.use(rateLimiter);
 
-// our simple custom middleware
-// app.use((req, res, next) => {
-//   console.log(`Req method is ${req.method} & Req URL is ${req.url}`);
-//   next();
-// });
+// CORS - allow local dev and deployed frontend
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173", // local frontend
+      "https://notes-frontend-mm14-5xldpa1ki-nikithas-projects-7e36f2ac.vercel.app", // deployed frontend
+    ],
+    credentials: true,
+  })
+);
+
+// ------------------ ROUTES ------------------
 
 app.use("/api/notes", notesRoutes);
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-  });
-}
+// ------------------ CONNECT TO DB & START SERVER ------------------
 
 connectDB().then(() => {
   app.listen(PORT, () => {
-    console.log("Server started on PORT:", PORT);
+    console.log(`Server started on PORT: ${PORT}`);
   });
-
 });
-
