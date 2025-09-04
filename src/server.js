@@ -17,7 +17,7 @@ const __dirname = path.resolve();
 if (process.env.NODE_ENV !== "production") {
   app.use(
     cors({
-      origin: "notes-frontend-lkgp.vercel.app",
+      origin: "notes-frontend-mm14-5xldpa1ki-nikithas-projects-7e36f2ac.vercel.app",
     })
   );
 }
@@ -46,3 +46,4 @@ connectDB().then(() => {
   });
 
 });
+
