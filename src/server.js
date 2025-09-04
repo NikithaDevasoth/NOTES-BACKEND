@@ -24,11 +24,9 @@ app.use(rateLimiter);
 // CORS - allow local dev and deployed frontend
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173", // local frontend
-      "https://notes-frontend-mm14-5xldpa1ki-nikithas-projects-7e36f2ac.vercel.app", // deployed frontend
-    ],
-    credentials: true,
+    origin:"http://localhost:5173" // local frontend
+      // deployed frontend
+    
   })
 );
 
@@ -43,3 +41,4 @@ connectDB().then(() => {
     console.log(`Server started on PORT: ${PORT}`);
   });
 });
+
